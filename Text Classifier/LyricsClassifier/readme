@@ -1,0 +1,13 @@
+Lyrics_Classifier:
+
+This Notebook was created to demonstrate the use of
+  * Web Scraping
+  * Beautiful Soup
+  * spaCy
+  * Bag of Words
+  * Naive Bayes
+
+It used ~50 lyrics from 3 different music bands:
+  * 66 lyrics from System Of A Down
+  * 56 lyrics from Emil Bulls
+  * 49 lyrics from blink-182
