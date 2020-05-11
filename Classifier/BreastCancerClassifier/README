@@ -1,5 +1,4 @@
-Data was obtained from https://www.kaggle.com/uciml/breast-cancer-wisconsin-data/version/2#data.csv
-in April 2020.
+Data was obtained from https://www.kaggle.com/uciml/breast-cancer-wisconsin-data/version/2#data.csv in April 2020.
 
 Different Classification Models were used:
 	* Logistic Regression

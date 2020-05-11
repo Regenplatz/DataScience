@@ -1,7 +1,6 @@
-Data was obtained from https://www.ecad.eu/dailydata/predefinedseries.php# 
-in April 2020.
+Data was obtained from https://www.ecad.eu/dailydata/predefinedseries.php# in April 2020.
 
-Following datasets were used:
+From there, following datasets were used:
 	- Daily maximum temperature TX
 	- Daily minimum temperature TN
 	- Daily mean temperature TG
