@@ -1,43 +1,24 @@
-Help a metropolitan bicycle sharing system to find out how many bicycles need to be ready at a given time
-
+"Help a metropolitan bicycle sharing system to find out how many bicycles need to be ready at a given time"
 #data was taken from https://www.kaggle.com/c/bike-sharing-demand/data
+For further information see also file "info_on_data"
 
-"""Following descriptions were given on the website and are just displayed here for quick information. 
-The description was further expanded by me for a systematic display"""
+This regression project was tried with different approaches regarding preprocessing of the self-introduced features 'hour' and 'month' (feature 'season' was eliminated to try to get more specific predictions per month). This finally addressed the issue one-hot-encoding vs multicolinearity:
 
-Data Fields:
+	- bicycleSharing:
+		No one-hot-encoding used for 'hour' and 'month' features. This approach is not right at all as hour 11 is not worth more than hour 3. However, it was tried for later comparison with the other approaches (which I like to call 'try to learn (and to see the differences)').
 
-datetime: hourly date + timestamp
+	- bicycleSharing2:
+		One-hot-encoding used for 'hour' and 'month' features. 
+		Before further processing, drop the last new feature to avoid perfect multicolinearity (as one of those new created features can be indirectly represented by the other new created features (were all entries are zero)).
 
-season:
-    1 = spring 
-    2 = summer 
-    3 = fall 
-    4 = winter
+	- bicycleSharing3:
+		First, introduce another column for 4-hour intervals ('hour4h') and finally one-hot-encode this feature. 
+		Before further processing, drop the last new feature to avoid perfect multicolinearity (as one of those new created features can be indirectly represented by the other new created features (were all entries are zero)).
+		
+Apart from this differing preprocessing, further processing was performed in the same way. Different regression models were tried such as RidgeCV, ElasticNet, SVR and RandomForestRegressor. 
 
-holiday: whether the day is considered a holiday
+You get different scores, different RMSLE and different likelihood to over-fit!
 
-workingday: whether the day is neither a weekend nor holiday 
-    0: Sat, Sun, holiday 
-    1: Mo-Fr (no holiday)
+At first sight, bicycleSharing (the model without one-hot-encoded hours and month) seems to work best, although it is not the way you should handle it.
 
-weather:
-    1: Clear, Few clouds, Partly cloudy, Partly cloudy 
-    2: Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist 
-    3: Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds 
-    4: Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog
-
-temp: temperature in Celsius
-
-atemp: "feels like" temperature in Celsius
-
-humidity: relative humidity
-
-windspeed: wind speed
-
-
-
-"""only in train.csv (and not in test.csv)"""
-    - casual: number of non-registered user rentals initiated
-    - registered: number of registered user rentals initiated
-    - count: number of total rentals
+Further analysis to be done...
