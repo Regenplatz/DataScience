@@ -1,7 +1,24 @@
 Data was obtained from https://www.kaggle.com/uciml/breast-cancer-wisconsin-data/version/2#data.csv in April 2020.
 
+
+Data included 
+	* radius
+	* texture
+	* perimeter
+	* compactness 
+	* symmetry 
+of suspicious breast tissue
+
+
 Different Classification Models were used:
 	* Logistic Regression
 	* Decision Tree
 	* Random Forest Classifier
 	* SVC
+
+
+Analysis focused on 
+	* Confusion Matrix
+	* ROC
+	* AUC
+	* Recall
