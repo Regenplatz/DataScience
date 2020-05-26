@@ -10,16 +10,16 @@ This regression project was tried with different approaches regarding preprocess
 #  
 ### About the Notebooks
 
-- **bicycleSharing1**:               
+- **bikeSharing1**:               
 
 	No one-hot-encoding used for 'hour' and 'month' features. This approach is not right at all as categorical variables like 'hour 11' is not worth more than 'hour 3'. However, it was tried for later comparison with the other approaches (which I like to call 'try to learn (and to see the differences)').
 
-- **bicycleSharing2**:
+- **bikeSharing2**:
 
 	One-hot-encoding used for 'hour' and 'month' features.
 	Before further processing, drop the last new feature to avoid perfect multicolinearity (as one of those new created features can be indirectly represented by the other new created features (were all entries are zero)).
 
-- **bicycleSharing3**:    
+- **bikeSharing3**:    
 
 	First, introduce another column for 4-hour intervals ('hour4h') and finally one-hot-encode this feature.
 	Before further processing, drop the last new feature to avoid perfect multicolinearity (as one of those new created features can be indirectly represented by the other new created features (were all entries are zero)).
