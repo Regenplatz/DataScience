@@ -1,0 +1,46 @@
+### Project Desciption
+
+This project aimed to simulate customer movements in a supermarket.
+
+
+##### Data
+
+Data was obtained from Spiced Academy as five separat csv files, each displaying customer movements on one day of the week.
+
+Each of the files (Mon-Fri) consisted of the following features:
+- timestamp
+- customerID
+- location
+
+As location, the following were given:
+- fruit
+- dairy
+- drinks
+- spices
+- checkout
+
+#  
+##### General approach
+
+For `Markov Chain` calculations, at first the transition probability matrix need to be calculated based on the actual data. Then, matrix multiplication with the transition probability matrix and the initial state vector (the customer's actual location) is performed to finally obtain the respective end state vector (which means the next location the customer moves to).
+
+First data processing:
+For calculating the transition probability matrix, the five csv files were read to pandas as DataFrame and initially edited (e.g. new customer IDs ('UniqueID') were generated as customerNo 1 on Monday was not the same as customerNo1 on Tuesday). Afterwards, those 5 DataFrames were merged to one singel DataFrame for further processing.
+
+
+The `Transition Probability Matrix`
+
+In this matrix, rows display the initial state while columns symbolize the next location. To display an nxn matrix where every state can be found as initial sate (row) as well as next state (column), the matrix was appropriatly expanded (including 'entrance' and 'checkout')
+In this project, the transition probability matrix was assumed to be stationary.
+
+
+#  
+### Project
+
+For this project, different approaches were tried and might later be extended:
+
+- **simulationSupermarket_rc.py**: ('rc' for 'total random choice')
+Get every next state (next location) by random choice, which means that the last calculated next state was not set as the initial state for the next step
+
+- **simulationSupermarket_mc.py**: ('mc' for 'markov chain calculations')
+Only get the first state (behind the entrance) by random choice and calculate all further customer movements by setting the last calculated next state as initial state for the next calculation --> as consquence, the movement will be the same for customers with the same first location
