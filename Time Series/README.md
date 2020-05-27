@@ -1,5 +1,5 @@
 #### Data
-Data was obtained from [here](https://www.ecad.eu/dailydata/predefinedseries.php)
+Data was obtained from [European Climate Assessment & Dataset](https://www.ecad.eu/dailydata/predefinedseries.php)
 in April 2020.
 
 From there, following datasets were used:
