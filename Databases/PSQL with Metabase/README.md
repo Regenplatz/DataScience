@@ -2,7 +2,7 @@
 This project was set up to build a `Northwind database` from the associated tables.
 
 Tables were taken from [here](
-https://github.com/pawlodkowski/northwind_data_clean/tree/master/data)
+https://github.com/pawlodkowski/northwind_data_clean/tree/master/data).
 
 The Northwind database was initially created and queried using `Bash`.
 Exemplary queries are available here: [Northwind_Querys](https://github.com/Regenplatz/DataScience/blob/master/Databases/PSQL%20with%20Metabase/Northwind_Querys)

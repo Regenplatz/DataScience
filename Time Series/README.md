@@ -1,13 +1,13 @@
 #### Data
-Data was obtained from https://www.ecad.eu/dailydata/predefinedseries.php
+Data was obtained from [here](https://www.ecad.eu/dailydata/predefinedseries.php)
 in April 2020.
 
 From there, following datasets were used:
-- Daily maximum temperature TX
-- Daily minimum temperature TN
-- Daily mean temperature TG
+- Daily maximum temperature (TX)
+- Daily minimum temperature (TN)
+- Daily mean temperature (TG)
 
-Only data for weather station 244 ('STAID000244'), located in
+Only data for weather station 244 ('STAID000244'), which is located in
 ZUERICH/FLUNTERN, SWITZERLAND was further processed.
 
 #       
