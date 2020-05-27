@@ -1,38 +1,8 @@
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
-#import seaborn as sns
 import random
 import transMatrix_df
-
-
-# We have a customer!
-# We have a transition matrix and initial distribution of first aisles.
-
-# ### Example.
-# I have 100 customers:
-
-
-# #### Step 1
-# Between 7-9am a customer comes every 10 minutes.
-# Between 9-11 there is a customer coming every minute.
-
-# #### Step 2
-# 40 are in fruits first (aisle 0)
-# 30 are in spices first (aisle 1)
-# 20 are in dairy first (aisle 2)
-# 10 are in drinks first (aisle 3)
-
-# Write a function that gives random integers (numpy has a function to generate random integers) between 0 and 3.
-# So if 0 then send the customer to fruit first. At the end, you can put if conditions so that if you already have
-# 44 customers in fruits you generate a new random number so that they don't go to fruits any more).'
-
-# #### Step 3
-# Transition matrix to follow one customer. And then many...
-
-# #### Step 4
-# Visualise this day for your bosses to show how at each hour customers moved....
-
 
 
 def create_tpMatrix():
@@ -41,7 +11,6 @@ def create_tpMatrix():
     tpm = np.array(df)
     return tpm
 #     print(tpm)
-#
 # create_tpMatrix()
 # exit()
 
@@ -61,7 +30,7 @@ def get_randomState(currentState):
     return states[entry],dict_initState[states[entry]]
 
 # initState, initState_vector = get_randomState('fruit')
-#print(initState, initState_vector)
+# print(initState, initState_vector)
 
 
 def calc_allStates():
@@ -101,7 +70,6 @@ def calc_allStates():
 
 def customerInSupermarket():
     """various customers move their locations in the supermarket"""
-
     cust_resultsDict = {}
 
     # 10 customers in the supermarket
