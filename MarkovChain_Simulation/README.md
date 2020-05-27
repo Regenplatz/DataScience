@@ -39,10 +39,10 @@ In this project, the transition probability matrix was assumed to be stationary.
 
 For this project, different approaches were tried and might later be extended:
 
-- [**simulationSupermarket_rc.py**](https://github.com/Regenplatz/DataScience/blob/master/MarkovChain_Simulation/simulationSupermarket_rc.py): ('rc' for 'total random choice')
+- [**simulationSupermarket_rc.py**](https://github.com/Regenplatz/DataScience/blob/master/MarkovChain_Simulation/simulationSupermarket_rc.py): ('rc' for 'total random choice')     
 Get every next state (next location) by random choice, which means that the last calculated next state was not set as the initial state for the next step
 
-- [**simulationSupermarket_mc.py**](https://github.com/Regenplatz/DataScience/blob/master/MarkovChain_Simulation/simulationSupermarket_mc.py): ('mc' for 'markov chain calculations')
+- [**simulationSupermarket_mc.py**](https://github.com/Regenplatz/DataScience/blob/master/MarkovChain_Simulation/simulationSupermarket_mc.py): ('mc' for 'markov chain calculations')    
 Only get the first state (behind the entrance) by random choice and calculate all further customer movements by setting the last calculated next state as initial state for the next calculation --> as consquence, the movement will be the same for customers with the same first location
 
 
