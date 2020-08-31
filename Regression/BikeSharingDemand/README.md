@@ -5,30 +5,18 @@
 Data was taken from https://www.kaggle.com/c/bike-sharing-demand/data      
 For further information see also file [info_on_data](https://github.com/Regenplatz/DataScience/blob/master/Regression/BikeSharingDemand/info_on_data)
 
-This regression project was tried with different approaches regarding preprocessing of the self-introduced features `hour` and `month` (feature 'season' was eliminated to try to get more specific predictions per month). This finally addressed the issue *one-hot-encoding* vs *multicolinearity*.
 
 #  
 ### About the Notebooks
 
 - [**bikeSharing1**](https://github.com/Regenplatz/DataScience/blob/master/Regression/BikeSharingDemand/bikeSharing1.ipynb):               
 
-	No one-hot-encoding used for 'hour' and 'month' features. This approach is not right at all as categorical variables like 'hour 11' is not worth more than 'hour 3'. However, it was tried for later comparison with the other approaches (which I like to call 'try to learn (and to see the differences)').
+	`Initial data exploration` was performed to get familiar with the kaggle training data set and their underlying distributions. Plots showed the absence of linear relations between feature *count* and the rest. *Count* also showed a right `skewed distribution` which might imply outliers. Features *casual* and *registered* explain 100% of feature *count* while *holiday* and *workingday* were not found to be mutually exclusive. Furthermore, `variance inflation factor` revealed `multicollinearity` for *temp* and *atemp* (which could also be seen in a heatmap). As `OLS assumptions` were not fulfilled, the machine learning part focused on non-linear regression models (as shown in [bikeSharing2](https://github.com/Regenplatz/DataScience/blob/master/Regression/BikeSharingDemand/bikeSharing2.ipynb)). In the interest of completeness, also linear regression models using different regularization techniques were tried (see [bikeSharing3](https://github.com/Regenplatz/DataScience/blob/master/Regression/BikeSharingDemand/bikeSharing3.ipynb)). As expected, the results were far from good.
 
 - [**bikeSharing2**](https://github.com/Regenplatz/DataScience/blob/master/Regression/BikeSharingDemand/bikeSharing2.ipynb):
 
-	One-hot-encoding used for 'hour' and 'month' features.
-	Before further processing, drop the last new feature to avoid perfect multicolinearity (as one of those new created features can be indirectly represented by the other new created features (were all entries are zero)).
+  The preprocessed DataFrame from [bikeSharing1](https://github.com/Regenplatz/DataScience/blob/master/Regression/BikeSharingDemand/bikeSharing1.ipynb) was further processed using the following non-linear regression models: *RandomForestRegressor*, *Gradient Boosting Regressor*, *AdaBoost Regressor*, *Support Vector Regressor (SVR)*. Except for SVR, they showed prediction scores >90%. *GradientBoostingRegressor* and *RandomForestRegressor* revealed RMSLE values <0.4, while SVR showed the worst result with a value greater than 0.7.
 
 - [**bikeSharing3**](https://github.com/Regenplatz/DataScience/blob/master/Regression/BikeSharingDemand/bikeSharing3.ipynb):    
 
-	First, introduce another column for 4-hour intervals ('hour4h') and finally one-hot-encode this feature.
-	Before further processing, drop the last new feature to avoid perfect multicolinearity (as one of those new created features can be indirectly represented by the other new created features (were all entries are zero)).
-
-Apart from this differing preprocessing, further processing was performed in the same way. Different regression models were tried such as *RidgeCV*, *ElasticNet*, *SVR* and *RandomForestRegressor*.
-
-You get different scores, different RMSLE and different likelihood to over-fit!
-
-At first sight, *bicycleSharing1* seems to work best, although it is not the way you should handle it!      
-Don't fall into the `Dummy Variable Trap` when you deal with categorical features!
-
-Further analysis to be done ...
+	This notebook shows linear regression models with different regularization techniques: *LinearRegression*, *RidgeCV*, *LassoCV*, *ElasticNet*. Although not expected to perform well, it is still shown here for the sake of completeness. All models performed bad with training and test scores <40%. RMSLE were found >1%. 
