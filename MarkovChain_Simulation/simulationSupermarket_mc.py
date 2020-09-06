@@ -3,6 +3,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 import random
 import transMatrix_df
+import supermarket as sm
+
 
 
 def create_tpMatrix():
@@ -87,11 +89,16 @@ def customerInSupermarket():
     cust_resultsDict = {}
 
     # 3 customers in the supermarket
-    for customer in range(3):
+    for customer in range(7):
         print('Customer No: ', customer)
         res = calc_allStates()
         cust_resultsDict.update({customer: res})
 
     print(f'Result dictionary for all customers: {cust_resultsDict}')
+
+    show_paths = sm.migrate_paths(cust_resultsDict)
+    sm.show_supermarket(show_paths)
+
+
 
 customerInSupermarket()

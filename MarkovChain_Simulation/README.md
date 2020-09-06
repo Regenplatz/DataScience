@@ -51,4 +51,4 @@ Only get the first state (behind the entrance) by random choice and calculate al
 
 #   
 ### Visualizing Simulation
-Visual simulation to be performed later on [supermarket.png](https://github.com/Regenplatz/DataScience/blob/master/MarkovChain_Simulation/supermarket.png)
+Visual simulation is performed on [supermarket.png](https://github.com/Regenplatz/DataScience/blob/master/MarkovChain_Simulation/supermarket.png). Related code can be found in python file [supermarket.py](https://github.com/Regenplatz/DataScience/blob/master/MarkovChain_Simulation/supermarket.py)
