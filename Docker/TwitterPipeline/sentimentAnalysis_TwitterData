@@ -1,0 +1,70 @@
+output_file = open("resulting_data.csv", "w")
+input_file = open("project_twitter_data.csv", "r")
+
+punctuation_chars = ["'", '"', ",", ".", "!", ":", ";", '#', '@']
+def strip_punctuation(word):
+    new_word = ""
+    for letter in word:
+        if letter in punctuation_chars:
+            letter = letter.replace(letter,"")
+        new_word  = new_word + letter
+    return new_word
+
+# lists of words to use
+positive_words = []
+with open("positive_words.txt") as pos_f:
+    for lin in pos_f:
+        if lin[0] != ';' and lin[0] != '\n':
+            positive_words.append(lin.strip())
+
+negative_words = []
+with open("negative_words.txt") as pos_f:
+    for lin in pos_f:
+        if lin[0] != ';' and lin[0] != '\n':
+            negative_words.append(lin.strip())
+
+def get_pos(sentence):
+    counter=0
+    words = sentence.split(" ")
+    for word in words:
+        #print(word)
+        if strip_punctuation(word).lower() in positive_words:
+            counter += 1
+    return counter
+
+def get_neg(sentence):
+    counter=0
+    words = sentence.split(" ")
+    for word in words:
+        if strip_punctuation(word) in negative_words:
+            counter +=1
+    return counter
+
+header_twitter = "Number of Retweets, Number of Replies, Positive Score, Negative Score, Net Score\n"
+output_file.write(header_twitter)
+
+header=True
+
+for row in input_file:
+    if header == True:
+        header = False
+    else:
+        input = row.split(",")
+        print("row: ",input)
+        reply_count=input[2].replace('\n','')
+        #print(reply_count)
+        retweet_count=input[1]
+        #print(retweet_count)
+        tweet_text=input[0]
+        pos_score=get_pos(row)
+        neg_score=get_neg(row)
+        total_score = pos_score - neg_score
+        #text=f'{retweet_count},{reply_count}'#,{pos_score},{neg_score},{total_score}'
+        text= '{},{},{},{},{}'.format(retweet_count,reply_count,pos_score,neg_score,total_score)
+        #text=str(retweet_count)
+        #print(text)
+        output_file.write(text+'\n')
+        #print(text)
+
+output_file.close()
+input_file.close()
