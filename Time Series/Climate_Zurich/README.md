@@ -5,5 +5,4 @@ was further processed. The dataset consisted of the daily mean temperature (TG).
 
 #       
 #### Data Processing
-
 Data was processed using Linear Model and seasonal autogregressive integrated moving average (SARIMA).
