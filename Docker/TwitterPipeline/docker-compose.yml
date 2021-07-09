@@ -1,0 +1,38 @@
+version: '1'
+
+  postgresdb:
+    container_name: postgres_container
+    image: postgres:12.6
+    environment:
+    - POSTGRES_PASSWORD=<yourPassword>
+    - POSTGRES_USER=<yourUsername>
+    ports:
+    - "5432:5432"
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+
+# data is already loaded in mongodb, temporarily deactivation
+  tweet_collector:
+    build: tweet_collector/
+    volumes:
+      - ./tweet_collector/:/tweet_collector
+    depends_on:
+      - mongodb
+
+  etl_job:
+    build: etl_job/
+    volumes:
+    - ./etl_job/:/etl_job
+    environment:
+    - POSTGRES_PASSWORD="<yourPassword>"
+    - POSTGRES_USER="<yourUsername>"
+    depends_on:
+    - postgresdb
+    - mongodb
+    - tweet_collector
+
+
+
