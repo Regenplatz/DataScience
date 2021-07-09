@@ -1,36 +1,27 @@
-### About this project
-Tweets from a person of interest were collected and analyzed using docker. For this, various docker containers for different data processing tasks were created (see below). Those containers were set into a pipeline via a [docker-compose.yml]() file.
-
-**Note: This project is not finished yet ...**
-
+## About this project
+Tweets from a person of interest were collected and analyzed using docker. For this, various docker containers for different data processing tasks were created (see below). Those containers were set into a pipeline via [docker-compose.yml](https://github.com/Regenplatz/DataScience/tree/master/Docker/TwitterPipeline/docker-compose.yml).
 <br>
 
+#### About the Twitter Pipeline
+This pipeline retrieves tweets (see [tweet_collector](https://github.com/Regenplatz/DataScience/tree/master/Docker/TwitterPipeline/tweet_collector)) and saves the data to a mongo database. From there, tweets are transforms, analyzed for sentiment and finally forwards it to a postgres database (see [etl_job](https://github.com/Regenplatz/DataScience/tree/master/Docker/TwitterPipeline/etl_job)) .
+<br>
 
-### The docker containers
+#### About the Docker Containers
 Each container consists of at least a
-- Dockerfile:
+- `Dockerfile`
   - declaration of used python image
   - declaration of virtual working directory
   - command for pip installation
   - call of python file
-- requirements.txt:
+- `requirements.txt`
   - required python modules to be imported for processing the python file
-- Python file with the relevant code
+- `*.py` python file with the relevant source code ([tweety.py](https://github.com/Regenplatz/DataScience/tree/master/Docker/TwitterPipeline/tweet_collector/tweety.py) or [etl.py](https://github.com/Regenplatz/DataScience/tree/master/Docker/TwitterPipeline/etl_job/etl.py))
 
+There is an additional file `config.py` in the container [tweet_collector](https://github.com/Regenplatz/DataScience/tree/master/Docker/TwitterPipeline/tweet_collector), which is needed to access tweets from twitter. It contains information about customer API and access token.
 
-#### [tweet_collector]():
-For accessing [Twitter](https://twitter.com/home) data you additionally need a [config.py](), which includes an access_token. You get this token, when you create a Twitter [developer account](https://developer.twitter.com/en). <br>
-
-
-
-
-
-#### [mongo_db]():
-
-
-
-#### [etl_job]():
-
-
-
-#### [postgres_db]():
+##### How to Use
+- Ensure that [Docker](https://docs.docker.com/get-docker/) is installed.
+- Get Twitter Developer API on [Developer.Twitter.com](https://developer.twitter.com/).
+- Setup the config.py file with your API creds.
+- Clone the repository - git clone https://github.com/Regenplatz/DataScience/tree/master/Docker/TwitterPipeline
+- In your terminal, run *docker-compose up*.
