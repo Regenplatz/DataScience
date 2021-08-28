@@ -1,0 +1,217 @@
+-- psql -U postgres
+
+-- create database
+CREATE DATABASE northwind_utf8;
+
+-- connect to database
+\c northwind_utf8
+
+
+
+-- employee_territories
+CREATE TABLE employee_territories(
+  employee_id INT NOT NULL,
+  territory_id INT NOT NULL
+  );
+
+\copy employee_territories FROM '../data/employee_territories.csv' DELIMITER ',' NULL 'NULL' CSV HEADER ENCODING 'UTF8';
+
+ALTER TABLE employee_territories
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+
+-- categories
+CREATE TABLE categories(
+  category_id INT NOT NULL ,
+  categoryName VARCHAR(50) ,
+  description TEXT ,
+  picture TEXT
+  );
+
+\copy categories FROM '../data/categories.csv' DELIMITER ',' NULL 'NULL' CSV HEADER ENCODING 'UTF8';
+
+ALTER TABLE categories
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+
+-- customers
+CREATE TABLE customers(
+  customer_id VARCHAR(5) NOT NULL ,
+  companyName VARCHAR(50) ,
+  contactName VARCHAR(60),
+  contactTitle VARCHAR(35),
+  address VARCHAR(100),
+  city VARCHAR(50),
+  region VARCHAR(20),
+  postalCode VARCHAR(10),
+  country VARCHAR(30),
+  phone VARCHAR(20),
+  fax VARCHAR(20)
+  );
+
+\copy customers FROM '../data/customers.csv' DELIMITER ',' NULL 'NULL' CSV HEADER ENCODING 'UTF8';
+
+ALTER TABLE customers
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+
+-- employees
+CREATE TABLE employees(
+  employee_id INT NOT NULL ,
+  lastName VARCHAR(50) ,
+  firstName VARCHAR(50) ,
+  title VARCHAR(50) ,
+  titleOfCourtesy VARCHAR(10) ,
+  birthDate TIMESTAMP,
+  hireDate TIMESTAMP,
+  address VARCHAR(100),
+  city VARCHAR(50),
+  region VARCHAR(30),
+  postalCode VARCHAR(10),
+  country VARCHAR(50),
+  homePhone VARCHAR(30),
+  extension INT,
+  photo TEXT,
+  notes TEXT,
+  reportsTo INT,
+  photoPath TEXT
+  );
+
+\copy employees FROM '../data/employees.csv' DELIMITER ',' NULL 'NULL' CSV HEADER ENCODING 'UTF8';
+
+ALTER TABLE employees
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+
+-- order_details
+CREATE TABLE order_details(
+  order_id INT NOT NULL ,
+  product_id INT NOT NULL,
+  unitPrice FLOAT,
+  quantity INT,
+  discount FLOAT
+  );
+
+\copy order_details FROM '../data/order_details.csv' DELIMITER ',' NULL 'NULL' CSV HEADER ENCODING 'UTF8';
+
+ALTER TABLE order_details
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+
+-- orders
+CREATE TABLE orders(
+  order_id INT NOT NULL ,
+  customer_id VARCHAR(5) ,
+  employee_id INT NOT NULL ,
+  orderDate TIMESTAMP,
+  requiredDate TIMESTAMP,
+  shippedDate TIMESTAMP,
+  shipVia INT,
+  freight FLOAT,
+  shipName VARCHAR(50),
+  shipAddress VARCHAR(100) ,
+  shipCity VARCHAR(50) ,
+  shipRegion VARCHAR(30) ,
+  shipPostalCode VARCHAR(10) ,
+  shipCountry VARCHAR(50)
+  );
+
+\copy orders FROM '../data/orders.csv' DELIMITER ',' NULL 'NULL' CSV HEADER ENCODING 'UTF8';
+
+ALTER TABLE orders
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+
+-- products
+CREATE TABLE products(
+  product_id INT NOT NULL ,
+  productName VARCHAR(100),
+  supplier_id INT NOT NULL,
+  category_id INT NOT NULL,
+  quantityPerUnit VARCHAR(50),
+  unitPrice FLOAT,
+  unitsInStock INT,
+  unitsOnOrder INT,
+  reorderLevel INT,
+  discontinued INT
+  );
+
+\copy products FROM '../data/products.csv' DELIMITER ',' NULL 'NULL' CSV HEADER ENCODING 'UTF8';
+
+ALTER TABLE products
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+
+-- regions
+CREATE TABLE regions(
+  region_id INT NOT NULL,
+  regionDescription VARCHAR(100)
+  );
+
+\copy regions FROM '../data/regions.csv' DELIMITER ',' NULL 'NULL' CSV HEADER ENCODING 'UTF8';
+
+ALTER TABLE regions
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+
+-- shippers
+CREATE TABLE shippers(
+  shipper_id INT NOT NULL ,
+  companyName VARCHAR(50) ,
+  phone VARCHAR(30)
+  );
+
+\copy shippers FROM '../data/shippers.csv' DELIMITER ',' NULL 'NULL' CSV HEADER ENCODING 'UTF8';
+
+ALTER TABLE shippers
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+
+-- suppliers
+CREATE TABLE suppliers(
+  supplier_id INT NOT NULL ,
+  companyName VARCHAR(40) ,
+  contactName VARCHAR(40) ,
+  contactTitle VARCHAR(30) ,
+  address VARCHAR(100) ,
+  city VARCHAR(50),
+  region VARCHAR(30),
+  postalCode VARCHAR(10),
+  country VARCHAR(50),
+  phone VARCHAR(30),
+  fax VARCHAR(30),
+  homePage TEXT
+  );
+
+\copy suppliers FROM '../data/suppliers.csv' DELIMITER ',' NULL 'NULL' CSV HEADER ENCODING 'UTF8';
+
+ALTER TABLE suppliers
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+
+-- territories
+CREATE TABLE territories(
+  territory_id INT NOT NULL ,
+  territoryDescription VARCHAR(40),
+  region_id INT NOT NULL
+  );
+
+\copy territories FROM '../data/territories.csv' DELIMITER ',' NULL 'NULL' CSV HEADER ENCODING 'UTF8';
+
+ALTER TABLE territories
+ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+
+-- execute code of file 'Northwind_readCSV'
+-- psql -U postgres -d northwind_utf8 -f Northwind_readCSV

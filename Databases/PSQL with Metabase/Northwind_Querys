@@ -1,0 +1,118 @@
+-- 1. Get the names and the quantities in stock for each product.
+SELECT DISTINCT productName, quantityPerUnit FROM products;
+
+-- 2. Get a list of current products (Product ID and name).
+SELECT product_id, unitPrice FROM products WHERE discontinued = 0;
+
+-- 3. Get a list of the most and least expensive products (name and unit price).
+SELECT MIN(productName), MAX(productName), MIN(unitPrice), MAX(unitPrice) FROM products;
+
+-- 4. Get products that cost less than $20.
+SELECT productName, unitPrice FROM products WHERE unitPrice < 20;
+
+--5. Get products that cost between $15 and $25.
+SELECT productName, unitPrice FROM products WHERE unitPrice BETWEEN 15 AND 25;
+
+-- 6. Get products above average price.
+SELECT productName, unitPrice FROM products WHERE unitPrice > (SELECT AVG(unitPrice) FROM products);
+---- average of unitPrice:
+SELECT AVG(unitPrice) FROM products;
+
+-- 7. Find the ten most expensive products.
+SELECT productName, unitPrice FROM products ORDER BY unitPrice DESC LIMIT 10;
+---- alternativ:
+SELECT productName, unitPrice FROM products ORDER BY unitPrice DESC FETCH FIRST 10 rows only;
+
+-- 8. Get a list of discontinued products (Product ID and name).
+SELECT product_id, productName FROM products WHERE discontinued = 1;
+
+-- 9. Count current and discontinued products.
+---- discontinued = 0 --> current, discontinued = 1 --> discontinued
+SELECT product_id, productName, discontinued FROM products;
+
+-- 10. Find products with less units in stock than the quantity on order.
+SELECT product_id, productName, unitsInStock, unitsOnOrder
+From products
+WHERE unitsInStock < unitsOnOrder;
+
+-- 11. Find the customer who had the highest order amount
+SELECT DISTINCT order_details.quantity, products.productName, customers.companyName, customers.contactName
+FROM order_details
+JOIN orders ON orders.order_id = order_details.order_id
+JOIN customers ON customers.customer_id = orders.customer_id
+JOIN products ON products.product_id = order_details.product_id
+WHERE order_details.quantity = (SELECT MAX(order_details.quantity) FROM order_details)
+;
+
+-- 12. Get orders for a given employee and the according customer
+SELECT DISTINCT order_details.*, customers.companyName, customers.contactName, employees.lastName, employees.firstName
+FROM order_details
+JOIN orders ON orders.order_id = order_details.order_id
+JOIN employees ON orders.employeeID = employees.employee_id
+JOIN customers ON customers.customer_id = orders.customerID
+WHERE employees.lastName = 'Fuller' AND employees.firstName = 'Andrew'
+;
+
+-- 13. Display the names of customers who ordered the same set of products as customers from Brazil
+SELECT DISTINCT customers.companyName, customers.contactName
+FROM customers
+JOIN orders ON customers.customer_id = orders.customer_id
+JOIN order_details ON orders.order_id = order_details.order_id
+JOIN products on products.product_id = order_details.product_id
+WHERE products.product_id
+IN (
+SELECT products.product_id
+FROM customers
+JOIN orders ON customers.customer_id = orders.customer_id
+JOIN order_details ON orders.order_id = order_details.order_id
+JOIN products on products.product_id = order_details.product_id
+WHERE customers.country = 'Brazil'
+)
+;
+
+-- 14. Find the hiring age of each employee
+SELECT AGE(hireDate,birthDate) FROM employees;
+-- 14a. Find employees being hired aged younger than 40 years
+SELECT *
+FROM employees
+WHERE 40 < (SELECT date_part('year',age(hireDate, birthDate)));
+-- 14b.
+SELECT date_part('year',age(hireDate, birthDate)) AS hire_age, count(*) AS age_count
+FROM employees
+GROUP BY date_part('year',age(hireDate, birthDate))
+;
+
+
+-- 15. Create views and/or named queries for some of these queries
+CREATE VIEW discont_prod AS
+SELECT product_id, productName FROM products WHERE discontinued = 1;
+
+
+
+-- 15. Create views and/or named queries for some of these queries
+create or replace  view country_test as
+SELECT DISTINCT customers.companyName, customers.contactName, cust2.country as land
+FROM customers
+JOIN orders ON customers.customer_id = orders.customer_id
+JOIN order_details ON orders.order_id = order_details.order_id
+JOIN products on products.product_id = order_details.product_id
+join order_details det2 on det2.product_id = products.product_id
+join orders ord2 on ord2.order_id = det2.order_id
+join customers cust2 on cust2.customer_id = ord2.customer_id  --and cust2.country = 'Brazil'
+;
+
+SELECT * FROM country_test
+WHERE land = 'Brazil'
+
+
+
+-- Sales of product "Sir Rodney's Scones" per country
+SELECT customers.country, products.productname, SUM(quantity) AS quantity
+FROM customers
+JOIN orders ON customers.customer_id = orders.customer_id
+JOIN order_details ON orders.order_id = order_details.order_id
+JOIN products on products.product_id = order_details.product_id
+WHERE productname = 'Sir Rodney''s Scones'
+GROUP BY customers.country, products.productname
+ORDER BY SUM(quantity) DESC
+;
