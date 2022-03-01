@@ -14,7 +14,12 @@ Initial [exploratory data analysis](EDA.ipynb) showed the presence of several ID
 In a next step, [various classifiers](variousClassifiers.py) were tried (*Random Forest*, *Logistic Regression*, *SVC*, *K-Nearest Neighbor*, *Multi Layer Perceptron*) with different hyperparameter settings. The algorithm evaluates the best hyperparameters per model via grid search. From those optimized models the best performing one is then used to predict on test data. However, this common classification approach does not display a usual recommendation system and is therefore provided supplementally.
 
 
-##### Recommender System: A Deep Learning Approach
+##### Recommender System: Matrix Factorization and SVD
+
+One possibility to build a recommender system requires [*matrix factorization*](MatrixFactorization.py) and *singular value decomposition* (SVD). This approach also requires pivotting, conversion into matrix and demeaning.
+
+
+##### Recommender System: Deep Learning Approach
 
 A recommender system was then built using a [keras deep learning](keras_deepLearning.py) approach. A single perceptron as well as sigmoid activation function are used on output layer for binary classification. As loss function *Binary Crossentropy* was set. Several quality metrics such as *AUC*, *BinaryAccuracy*, *Precision* and *Recall* are being evaluated.
 
