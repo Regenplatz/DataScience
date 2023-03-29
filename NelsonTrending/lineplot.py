@@ -96,9 +96,6 @@ initial_date_list = initial_date.strftime("%d/%m/%Y").split("/")
 
 app = Dash(__name__)
 
-initial_date_list = ["01", "01", "2011"]
-today_date_list = ["31", "12", "2011"]
-
 app.layout = html.Div([
     html.H2("Nelson Trending Rules"),
     html.Div([
