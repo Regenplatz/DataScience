@@ -277,7 +277,9 @@ class TrendingRules:
             df = self.rule03(no_points)
 
         elif ruleName == "Rule 04":
-            df = self.rule04()
+            if no_points is None:
+                no_points = 14
+            df = self.rule04(no_points)
 
         elif ruleName == "Rule 05":
             if noPoints_window is None:
