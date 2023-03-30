@@ -10,7 +10,7 @@ from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objects as go
 import plotly.express as px
 from loadData import loadData, extractLastMonths, evaluateMeanPerMonth
-import TrendingRules_extended as tr
+import TrendingRules as tr
 
 
 #########################################################################
@@ -20,7 +20,7 @@ import TrendingRules_extended as tr
 ## load the last 12 months' data, the 12 months' mean and std
 colName = "temp"
 date_col = "datetime"
-df_raw = loadData("data/bikeSharing/train.csv", colName, date_col)
+df_raw = loadData("C:/Users/Kiki/Desktop/NelsonTrending/data/bikeSharing/train.csv", colName, date_col)
 y_latest = 2012     ## year of the date from which you want to look back, e.g. 2022 from 12-2022
 m_latest = 1        ## month of the date from which you want to look back, e.g. 12 from 12-2022
 no_months = 12
@@ -41,6 +41,9 @@ sigmas = {"+1 std": (mean_lastMonths + 1 * std_lastMonths, "dash"),
           "mean": (mean_lastMonths, None)
           }
 
+## define the parameters for calculation. For e.g. rule 3, the default number of points is set to 6 for displaying
+## "Six (or more) points in a row are continually increasing (or decreasing)". You can adjust the number to
+## tailor it towards your own needs.
 paramsPerRule = {"Rule 01": {"std_value": 3},
                  "Rule 02": {"no_points": 9},
                  "Rule 03": {"no_points": 6},
@@ -51,7 +54,7 @@ paramsPerRule = {"Rule 01": {"std_value": 3},
                  "Rule 08": {"no_points": 8, "std_value": 1}
                  }
 
-## map trending rule number to trending rule details
+## map trending rule number to trending rule details: Key, Value will be displayed in drop down menu
 rules = {"Rule 01": f"""1 point is more than {paramsPerRule['Rule 01']['std_value']} standard deviations 
                     from the mean""",
          "Rule 02": f"""{paramsPerRule['Rule 02']['no_points']} (or more) points in a row are on the 
@@ -95,6 +98,9 @@ initial_date_list = initial_date.strftime("%d/%m/%Y").split("/")
 #########################################################################
 
 app = Dash(__name__)
+
+initial_date_list = ["01", "01", "2011"]
+today_date_list = ["31", "12", "2011"]
 
 app.layout = html.Div([
     html.H2("Nelson Trending Rules"),
@@ -142,10 +148,11 @@ def updateDashboard(ruleName, start_date, end_date):
     df_dateSelection = df_sel[(df_sel[date_col] >= start_date) & (df_sel[date_col] <= end_date)]
 
     ## evaluate mean per month for each of the last months
-    df_lastMonths = evaluateMeanPerMonth(lastMonths, df_dateSelection)
+    df_lastMonths_meanPerMonth = evaluateMeanPerMonth(lastMonths, df_dateSelection)
 
     ## create class object for dataframe according to trending rules
-    df_object = tr.TrendingRules(df_lastMonths, colName)
+    df_object = tr.TrendingRules(df_lastMonths_meanPerMonth, df_sel, colName)
+    # df_object = tr.TrendingRules(df_sel, colName)
 
     ## retrieve data according to chosen trending rule
     df = df_object.getRule(ruleName[:7], **paramsPerRule[ruleName[:7]])

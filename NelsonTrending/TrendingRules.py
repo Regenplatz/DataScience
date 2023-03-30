@@ -8,17 +8,17 @@ import numpy as np
 
 class TrendingRules:
 
-    def __init__(self, df, colName):
+    def __init__(self, df_meanPerMonth, df_sel, colName):
         """
         Initialize class variables.
         :param df: dataframe, containing the data of interest
         :param colName: String, column name containing data of interest to be processed / analyzed
         """
-        self.df = df
+        self.df = df_meanPerMonth
         self.colName = colName
         self.data = self.df[self.colName]
-        self.mean = np.mean(df[colName], axis=0)
-        self.sigma = np.std(df[colName], axis=0)
+        self.mean = np.mean(df_sel[colName], axis=0)
+        self.sigma = np.std(df_sel[colName], axis=0)
         ## initialize color code as green and overwrite outlier's color code later
         self.df["colorCode"] = "Green"
 
