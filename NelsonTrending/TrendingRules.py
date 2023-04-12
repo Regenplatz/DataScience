@@ -32,7 +32,7 @@ class TrendingRules:
         """
         dict_lastElements = {}
         for ind, el in lastElements:
-            dict_lastElements[idx - (len(lastElements) - 1) + ind] = el
+            dict_lastElements[idx - (len(lastElements)-1) + ind] = el
         self.df["colorCode"].iloc[[k for k, v in dict_lastElements.items() if v == min(lastElements)]] = "Yellow"
 
 
@@ -47,7 +47,7 @@ class TrendingRules:
         :return: dataframe containing outlier/trend color coding
         """
         for idx, elem in enumerate(self.data):
-            last_noPoints = list(self.data.iloc[idx - (noPoints_window - 1):idx + 1])
+            last_noPoints = list(self.data.iloc[idx - (noPoints_window-1):idx+1])
             if len(last_noPoints) == noPoints_window:
                 helperX = sorted(last_noPoints)
                 minX = helperX[len(helperX) - noPointsOutOf_window:]
@@ -56,7 +56,7 @@ class TrendingRules:
                 if min(last_noPoints) > self.mean:
                     ## color points in red if condition fulfilled
                     if min(minX) > self.mean + (std_value * self.sigma):
-                        self.df["colorCode"].iloc[idx - (noPoints_window - 1):idx + 1] = "Red"
+                        self.df["colorCode"].iloc[idx - (noPoints_window-1):idx+1] = "Red"
                         ## in case only m out of n points are greater x*sigma, color the remaining ones in yellow
                         if min(last_noPoints) < (std_value * self.sigma):
                             self.colorYellow(last_noPoints, idx)
@@ -97,7 +97,7 @@ class TrendingRules:
         :return: dataframe containing outlier color coding.
         """
         for idx, elem in enumerate(self.data):
-            last_noPoints = list(self.data.iloc[idx - (no_points - 1):idx + 1])
+            last_noPoints = list(self.data.iloc[idx - (no_points-1):idx+1])
             if len(last_noPoints) == no_points:
                 if min(last_noPoints) > self.mean or max(last_noPoints) < self.mean:
                     self.df["colorCode"].iloc[idx - (no_points - 1):idx + 1] = "Red"
@@ -116,7 +116,7 @@ class TrendingRules:
             last_direction = "start"
             last_elem = -100
             cnt = 0
-            last_noPoints = list(self.data.iloc[idx - (no_points - 1):idx + 1])
+            last_noPoints = list(self.data.iloc[idx - (no_points-1):idx+1])
             if len(last_noPoints) == no_points:
 
                 for elem2 in last_noPoints:
@@ -218,7 +218,7 @@ class TrendingRules:
         :return: dataframe containing outlier color coding.
         """
         for idx, elem in enumerate(self.data):
-            last_noPoints = list(self.data.iloc[idx - (no_points - 1):idx + 1])
+            last_noPoints = list(self.data.iloc[idx - (no_points-1):idx+1])
             if len(last_noPoints) == no_points:
                 if min(last_noPoints) > (self.mean - (std_value * self.sigma)) and \
                         max(last_noPoints) < (self.mean + (std_value * self.sigma)):
@@ -235,16 +235,23 @@ class TrendingRules:
         :param std_value: int, number of standard deviations, e.g. 2 for 2 std
         :return: dataframe containing outlier color coding.
         """
+        belowMean = False
+        aboveMean = False
         foundWithin = False
         for idx, elem in enumerate(self.data):
-            last_noPoints = list(self.data.iloc[idx - (no_points - 1):idx + 1])
+            last_noPoints = list(self.data.iloc[idx - (no_points-1):idx+1])
             if len(last_noPoints) == no_points:
                 for el in last_noPoints:
                     if (self.mean - (std_value * self.sigma)) < el < (self.mean + (std_value * self.sigma)):
                         foundWithin = True
-                        break
-                if not foundWithin:
-                    self.df["colorCode"].iloc[idx - (no_points - 1):idx + 1] = "Red"
+                        if (el < self.mean) and (belowMean is False):
+                            belowMean = True
+                        if el > self.mean and (aboveMean is False):
+                            aboveMean = True
+                if not foundWithin and (belowMean is True) and (aboveMean is True):
+                    self.df["colorCode"].iloc[idx - (no_points-1):idx+1] = "Red"
+                else:
+                    pass
             foundWithin = False
 
         return self.df
