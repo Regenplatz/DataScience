@@ -1,6 +1,6 @@
 ## CHESS
 
-For this project, data from [kaggle]() was used. This data consists of images from chessboards with the *Forsyth-Edwards-Notation* (FEN) as filenames.
+For this project, data from [kaggle](https://www.kaggle.com/datasets/koryakinp/chess-positions) was used. This data consists of images from chessboards with the *Forsyth-Edwards-Notation* (FEN) as filenames.
 
 Running [main.py](main.py) processes all steps that are explained below:
 
