@@ -1,0 +1,5 @@
+Navigate to TimeSeries/EnergyConsumption in pycharm terminal.
+Then run following code:
+
+	bokeh serve --show webAppBokeh
+
