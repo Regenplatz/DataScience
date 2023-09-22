@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import re
 import spacy
+from sklearn.preprocessing import StandardScaler
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
@@ -16,7 +17,7 @@ from sklearn.feature_selection import chi2
 from sklearn.model_selection import train_test_split, cross_validate, cross_val_score
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
+from rank_bm25 import BM25Okapi
 from matplotlib import pyplot as plt
 import seaborn as sns
 from typing import Tuple
@@ -45,8 +46,9 @@ def preprocessData(df: pd.DataFrame, colName_X: str, colName_idx: str,
     # tbd
 
     ## clean text: remove special characters and white spaces
+    df[colName_X] = df[colName_X].replace("\n", " ").replace("\r\n", " ").replace("\t", " ")
     df[f"{colName_X}_cleaned"] = df[colName_X].replace(r"[^A-Za-zäÄöÖüÜ0-9]", " ", regex=True)\
-        .replace(r"\s+[a-zA-Z]\s+", " ", regex=True)
+        .replace(r"\s+", " ", regex=True)
 
     ## remove stopwords and lemmatize
     languageModel = spacy.load(languageEncoding)
@@ -94,12 +96,13 @@ def vectorizeText(vectorizer: object, data: list) -> Tuple[pd.DataFrame, np.arra
     return df, array_X_features, tokens, vectorMatrix, vocabulary, vectorizer
 
 
-def findMostCorrelatedTerms(dict_perID: dict, colName_y: str, features: np.array,
+def findMostCorrelatedTerms(df: pd.DataFrame, dict_perID: dict, colName_y: str, features: np.array,
                             ngram_range: tuple, fitted_vectorizer: object, n: int) -> dict:
     """Find the most correlated terms in text"""
     dict_grams = {(1, 1): 1,
                   (2, 2): 2}
     dict_gramsPerID = {}
+    labels = df[colName_y]
     for id, val in dict_perID.items():
         features_chi2 = chi2(features, labels=val[colName_y])
         indices = np.argsort(features_chi2[0])
@@ -126,21 +129,16 @@ def classifyText(X_train: pd.Series, X_test: pd.Series, y_train: pd.Series, y_te
         -> Tuple[dict, pd.DataFrame, pd.DataFrame]:
     """Vectorize text, fit classifier, predict and save prediction as well as model performance to dictionary"""
 
-    ## vectorize text
-    array_X_train, array_X_test = returnVectorizedArrays(vectorizer=vectorizer,
-                                                         X_train=X_train,
-                                                         X_test=X_test)
-
     ## fit classifier
-    clf.fit(array_X_train, np.ravel(y_train))
-    training_score = clf.score(array_X_train, np.ravel(y_train))
+    clf.fit(X_train, np.ravel(y_train))
+    training_score = clf.score(X_train, np.ravel(y_train))
 
     ## predict probabilities
-    pred_proba = clf.predict_proba(array_X_test).round(5)
+    pred_proba = clf.predict_proba(X_test).round(5)
     df_predProba = pd.DataFrame(columns=clf.classes_, data=pred_proba, index=idx_testData)
 
     ## predict category (y)
-    y_pred = clf.predict(array_X_test)
+    y_pred = clf.predict(X_test)
     df_yPred = pd.DataFrame(data=y_pred, index=idx_testData)
 
     ## load quality metrics / model performances to dictionary
@@ -159,16 +157,20 @@ def dimReductionPCA(X_train: pd.Series, X_test: pd.Series, idx_testData: list,
     array_X_train = vectorizer.transform(X_train).toarray()
     array_X_test = vectorizer.transform(X_test).toarray()
 
-    ## create dataframe to also include infos on IDs and tokens
-    df_testData = createDF_testData(array_X_test=array_X_test,
-                                    idx_testData=idx_testData,
-                                    fitted_vectorizer=vectorizer
-                                    )
+    ## scale data
+    scaler = StandardScaler()
+    array_X_train_scaled = scaler.fit_transform(array_X_train)
+    array_X_test_scaled = scaler.transform(array_X_test)
 
+    ## apply Principle Component Analysis
     pca = PCA(n_components=n_components)
-    pca.fit(df_testData.iloc[:, :-1])
+    X_train_pca = pca.fit_transform(array_X_train_scaled)
+    print("COMPONENTS ------------------------------", pca.components_)
+    print("\nEXPLAINED VARIANCE --------------------", pca.explained_variance_)
+    print("\nEXPLAINED VARIANCE RATIO --------------", pca.explained_variance_ratio_)
+    X_test_pca = pca.transform(array_X_test_scaled)
 
-    return pca.explained_variance_ratio_
+    return X_train_pca, X_test_pca, pca.explained_variance_ratio_
 
 
 def plotPCAExplainableVariance(figsize: tuple, explained_variance_ratio: np.array) -> None:
@@ -235,7 +237,7 @@ def plotClusterMap(array_X_test: np.array, idx_testData: list,
 
 def main():
 
-    ##### PREPARATION #########################################################################################
+    ##### LOAD DATA and PREPROCESS ############################################################################
     ###########################################################################################################
 
     ## load data
@@ -256,8 +258,30 @@ def main():
                                     colName_idx=str_colName_idx,
                                     languageEncoding=languageEncoding)
 
+
+    ##### BM25: GET MOST SIMILAR TEXT #########################################################################
+    ###########################################################################################################
+
+    corpus = df[f"{str_colName_X}_lemmatized"].tolist()
+    bm25 = BM25Okapi(corpus)
+
+    ## text for which the most similar text is to be looked for
+    tokenized_query = df[f"{str_colName_X}_lemmatized"][9]
+
+    ## evaluate most similar text
+    #doc_scores = bm25.get_scores(tokenized_query)
+    #print(doc_scores)
+    most_similar_text = bm25.get_top_n(tokenized_query, corpus, n=1)
+    id_of_most_similar_text = df[f"{str_colName_X}_lemmatized"] == bm25.get_top_n(tokenized_query,
+                                                                                  corpus, n=2)[0, :][str_colName_idx]
+    print(id_of_most_similar_text, most_similar_text)
+
+
+    ##### VECTORIZE TEXT ######################################################################################
+    ###########################################################################################################
+
     ## define vectorizer
-    hyperparams_vectorizer = {"analzyer": "word",
+    hyperparams_vectorizer = {"analyzer": "word",
                               "ngram_range": (2, 2)}
     vectorizer = TfidfVectorizer(**hyperparams_vectorizer)
 
@@ -267,14 +291,14 @@ def main():
         data=df[f"{str_colName_X}_lemmatized"]
     )
 
-
     ##### MOST CORRELATED TERMS IN TEXT #######################################################################
     ###########################################################################################################
 
     ## find most correlated terms
     n = 10
     ngram_range = (2, 2)
-    dict_gramsPerID = findMostCorrelatedTerms(dict_perID=dict_perID,
+    dict_gramsPerID = findMostCorrelatedTerms(df=df,
+                                              dict_perID=dict_perID,
                                               colName_y=str_colName_y,
                                               features=array_X,
                                               ngram_range=ngram_range,
@@ -283,14 +307,8 @@ def main():
     print(f"TOP {n} GRAMS {ngram_range}:", dict_gramsPerID[df[str_colName_idx][0]][f"top{n}_grams"])
 
 
-    ##### CLASSIFICATION ######################################################################################
+    ##### DIMENSIONALITY REDUCTION ############################################################################
     ###########################################################################################################
-
-    ## define classifier
-    hyperparams_classifier = {"n_estimators": 100,
-                              "max_depth": 5,
-                              "random_state": 1569}
-    clf = RandomForestClassifier(**hyperparams_classifier)
 
     ## assign training and test data and keep track of IDs (as index)
     df.set_index(str_colName_idx, inplace=True)
@@ -300,33 +318,40 @@ def main():
     idx_trainData = X_train.index
     idx_testData = X_test.index
 
+    ## dimensionality reduction via Principle Component Analysis (PCA)
+    X_train_pca, X_test_pca, explained_variance_ratio = dimReductionPCA(X_train=X_train,
+                                                                        X_test=X_test,
+                                                                        idx_testData=idx_testData,
+                                                                        vectorizer=fitted_vectorizer,
+                                                                        n_components=9)
+
+    ## plot Explainable Variance per Principle Component
+    plotPCAExplainableVariance(figsize=(15, 8),
+                               explained_variance_ratio=explained_variance_ratio)
+
+
+    ##### CLASSIFICATION ######################################################################################
+    ###########################################################################################################
+
+    ## define classifier
+    hyperparams_classifier = {"n_estimators": 100,
+                              "max_depth": 5,
+                              "random_state": 5890}
+    clf = RandomForestClassifier(**hyperparams_classifier)
+
     ## classify
     dict_clfResults = {}
-    dict_clfResults, df_predProba, df_yPred = classifyText(X_train=X_train,
-                                                           X_test=X_test,
+    dict_clfResults, df_predProba, df_yPred = classifyText(X_train=X_train_pca,
+                                                           X_test=X_test_pca,
                                                            y_train=y_train,
                                                            y_test=y_test,
                                                            vectorizer=vectorizer,
                                                            clf=clf,
                                                            dict_res=dict_clfResults,
                                                            idx_testData=idx_testData)
-    print("ACCURACY:", dict_clfResults[clf]["accuracy"])
-    print("PREDICTION:", df_yPred)
-
-
-    ##### DIMENSIONALITY REDUCTION ############################################################################
-    ###########################################################################################################
-
-    ## dimensionality reduction via Principle Component Analysis (PCA)
-    explained_variance_ratio = dimReductionPCA(X_train=X_train,
-                                               X_test=X_test,
-                                               idx_testData=idx_testData,
-                                               vectorizer=fitted_vectorizer,
-                                               n_components=9)
-
-    ## plot Explainable Variance per Principle Component
-    plotPCAExplainableVariance(figsize=(15, 8),
-                               explained_variance_ratio=explained_variance_ratio)
+    df_yPred.rename(columns={0: "prediction"}, inplace=True)
+    print("CLASSIFICATION ACCURACY -----------------------------------\n", dict_clfResults[clf]["accuracy"])
+    print("\nCLASSIFICATION PREDICTION ---------------------------------\n", df_yPred)
 
 
     ##### CLUSTERING ##########################################################################################
@@ -338,10 +363,11 @@ def main():
     clustAlg = KMeans(n_clusters=5, **hyperparams_clustering)
 
     ## cluster text
-    y_pred, array_X_train, array_X_test = clusterText(X_train=X_train,
-                                                      X_test=X_test,
-                                                      vectorizer=vectorizer,
-                                                      clustAlg=clustAlg)
+    array_yPred, array_X_train, array_X_test = clusterText(X_train=X_train_pca,
+                                                           X_test=X_test_pca,
+                                                           vectorizer=vectorizer,
+                                                           clustAlg=clustAlg)
+    print("\nCLUSTERING PREDICTION ------------------------------------\n", array_yPred)
 
     ## create Elbow Plot to visually assess the best suitable number of clusters
     cv = 5
