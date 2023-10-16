@@ -57,7 +57,7 @@ ipywidgets @ file:///tmp/build/80754af9/ipywidgets_1634143127070/work
 javascripthon==0.11
 jedi @ file:///C:/ci/jedi_1644315425835/work
 Jinja2 @ file:///C:/b/abs_7cdis66kl9/croot/jinja2_1666908141852/work
-joblib==1.1.0
+joblib==1.2.0
 json-tricks @ file:///home/conda/feedstock_root/build_artifacts/json_tricks_1667605210537/work
 json5 @ file:///tmp/build/80754af9/json5_1624432770122/work
 jsonschema @ file:///C:/b/abs_59eyhnbyej/croots/recipe/jsonschema_1663375476535/work
