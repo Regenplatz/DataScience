@@ -42,3 +42,12 @@ Therefore, *PowerOutput* was finally plotted against the *offsetWindDirection* a
 However, for a more precise yaw adjustment, the lineplot (on different time windows for aggregations, *offsetWindDirection* vs *WindSpeed*, see above) should be considered. Moreover, plots on different *PowerOutput* bins vs *offsetWindDirection* might provide more precise insights.
 
 For details please refer to [analysis.ipynb](analysis.ipynb).
+
+
+#### Data Source
+At the [*Energy Data Hackdays*](https://energydatahackdays.ch), data was provided as parquet file.
+However, similar data is available on [Zenodo](Zenodo.org) for wind turbines 
+- https://zenodo.org/records/8223010
+- https://zenodo.org/records/8192149
+- https://zenodo.org/records/8252025
+- https://zenodo.org/record/8253010
