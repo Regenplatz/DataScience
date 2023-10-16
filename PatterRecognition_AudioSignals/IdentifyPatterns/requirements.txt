@@ -89,7 +89,7 @@ pyzmq==22.3.0
 qtconsole==5.3.0
 QtPy==2.0.1
 scikit-learn @ file:///C:/ci/scikit-learn_1642599125707/work
-scipy==1.8.0
+scipy==1.10.0
 Send2Trash==1.8.0
 setuptools-scm @ file:///home/conda/feedstock_root/build_artifacts/setuptools_scm_1642602454341/work
 simpleaudio==1.0.4
