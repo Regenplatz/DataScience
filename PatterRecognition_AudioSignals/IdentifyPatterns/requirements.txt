@@ -41,7 +41,7 @@ jupyter-nbextensions-configurator==0.4.1
 jupyterlab-pygments==0.2.2
 jupyterlab-widgets==1.1.0
 kiwisolver @ file:///D:/bld/kiwisolver_1648854542949/work
-lxml==4.8.0
+lxml==4.9.1
 MarkupSafe==2.1.1
 matplotlib @ file:///D:/bld/matplotlib-suite_1639359275746/work
 matplotlib-inline==0.1.3
