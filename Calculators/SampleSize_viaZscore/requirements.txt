@@ -70,7 +70,7 @@ six @ file:///tmp/build/80754af9/six_1644875935023/work
 stack-data==0.6.2
 statsmodels @ file:///C:/b/abs_bdqo3zaryj/croot/statsmodels_1676646249859/work
 tenacity==8.1.0
-tornado==6.2
+tornado==6.3.3
 traitlets==5.8.0
 urllib3 @ file:///C:/b/abs_9bcwxczrvm/croot/urllib3_1673575521331/work
 wcwidth==0.2.5
