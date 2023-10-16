@@ -27,7 +27,7 @@ Flask-Compress @ file:///C:/b/abs_a7ii9f64l5/croot/flask-compress_1668714951742/
 idna @ file:///C:/b/abs_bdhbebrioa/croot/idna_1666125572046/work
 importlib-metadata @ file:///C:/b/abs_20ndzb2j6v/croot/importlib-metadata_1678997085534/work
 ipykernel==6.19.4
-ipython==8.7.0
+ipython==8.10.0
 itsdangerous @ file:///tmp/build/80754af9/itsdangerous_1621432558163/work
 jedi==0.18.2
 Jinja2 @ file:///C:/b/abs_7cdis66kl9/croot/jinja2_1666908141852/work
