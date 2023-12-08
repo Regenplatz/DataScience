@@ -27,11 +27,7 @@ However, the plots show different *offsetWindDirections* for different *WindSpee
 
 
 #### Further Analysis
-As mentioned above, a time aggregation of 300s was used for further analyses. Moreover, *offsetWindDirection* between -30 and +30 degrees were selected as these contained most of the data. Data was plotted in 3D to get a first impression of the connection between all three attributes (see plot below). For low *PowerOutput* and high *WindSpeed* you can see a slight shift in *offsetWindDirection* which requires further analyses (amplitude of orange scatters seems to be smaller as the one of the magenta scatters).
-
-<img src="plot_3D.png" width="350">
-
-For further investigations, *PowerOutput* vs *WindSpeed* was plotted for different *offsetWindDirection* bins. For *offsetWindDirection* of e.g. [-30, -25]°, higher counts were observed as for [+25, +30]° (see image below), which implies potential yaw misalignment.
+As mentioned above, a time aggregation of 300s was used for further analyses. Moreover, *offsetWindDirection* between -30 and +30 degrees were selected as these contained most of the data. *PowerOutput* vs *WindSpeed* was plotted for different *offsetWindDirection* bins. For *offsetWindDirection* of e.g. [-30, -25]°, higher counts were observed as for [+25, +30]° (see image below), which implies potential yaw misalignment.
 
 <img src="plot_scatter_differentOffsetWindDir.png" width="600">
 
@@ -46,7 +42,7 @@ For details please refer to [analysis.ipynb](analysis.ipynb).
 
 #### Data Source
 At the [*Energy Data Hackdays*](https://energydatahackdays.ch), data was provided as parquet file.
-However, similar data is available on [Zenodo](Zenodo.org) for wind turbines 
+However, similar data is available on [Zenodo](Zenodo.org) for wind turbines
 - https://zenodo.org/records/8223010
 - https://zenodo.org/records/8192149
 - https://zenodo.org/records/8252025
