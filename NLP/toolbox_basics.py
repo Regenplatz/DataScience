@@ -64,6 +64,13 @@ def jaccardSimDist(text1: list, text2: list) -> Tuple[float, float]:
     return jaccSim, jaccDist
 
 
+def cosineSimilarity(array_X: np.array, tokens: list) -> pd.DataFrame:
+    """Evaluate Cosine Similarities"""
+    cosSim_matrix = cosineSimilarity(array_X)
+    doc_names = [f"doc_{i+1}" for i, _ in enumerate(cosSim_matrix)]
+    df_cosSim = pd.DataFrame(data=cosSim_matrix, index=doc_names, columns=tokens)
+    return df_cosSim
+
 
 def main():
     pass
