@@ -6,7 +6,7 @@ attrs==21.4.0
 backcall==0.2.0
 beautifulsoup4==4.11.1
 bleach==5.0.0
-certifi==2021.10.8
+certifi==2023.7.22
 cffi==1.15.0
 colorama==0.4.4
 cycler @ file:///home/conda/feedstock_root/build_artifacts/cycler_1635519461629/work
