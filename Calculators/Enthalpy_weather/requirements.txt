@@ -149,7 +149,7 @@ requests @ file:///C:/ci/requests_1657717096906/work
 requests-toolbelt @ file:///home/conda/feedstock_root/build_artifacts/requests-toolbelt_1667050328587/work
 ruamel.yaml @ file:///D:/bld/ruamel.yaml_1649033381148/work
 ruamel.yaml.clib @ file:///C:/b/abs_aarblxbilo/croot/ruamel.yaml.clib_1666302270884/work
-scipy==1.9.3
+scipy==1.10.0
 seaborn @ file:///C:/b/abs_64ypwhwrqe/croot/seaborn_1669625732106/work
 Send2Trash @ file:///tmp/build/80754af9/send2trash_1632406701022/work
 sip @ file:///C:/Windows/Temp/abs_b8fxd17m2u/croots/recipe/sip_1659012372737/work
