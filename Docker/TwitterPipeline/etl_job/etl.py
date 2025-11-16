@@ -8,11 +8,11 @@ from sqlalchemy import create_engine
 
 
 ##### postgres vars
-POSTGRES_USER = "postgres"
-POSTGRES_PASSWORD = "postgres"
-HOST = 'postgres_container'
-DB = 'postgres'
-PORT = '5432'
+POSTGRES_USER = ""
+POSTGRES_PASSWORD = ""
+HOST = ''
+DB = ''
+PORT = ''
 
 
 ##### mongodb
